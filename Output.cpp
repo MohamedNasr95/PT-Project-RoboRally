@@ -270,11 +270,22 @@ void Output::CreateDesignModeToolBar() const
 	// reoder them in UI_Info.h ==> enum DESIGN_MODE_ITEMS
 	// ** MAKE SURE THAT THE IMAGES ARE .JPG FILES **
 	string MenuItemImages[DESIGN_ITM_COUNT];
-	MenuItemImages[ITM_EXIT] = "images\\Menu_Exit.jpg";
+	MenuItemImages[ITM_SET_FLAG_CELL] = "images\\FLAG.jpg";
+	MenuItemImages[ITM_EXIT_DM] = "images\\Menu_Exit.jpg";
 	MenuItemImages[ITM_SWITCH_TO_PLAY_MODE] = "images\\START.jpg";
+	MenuItemImages[ITM_SET_ANTENNA_CELL] = "images\\ANTENNA.jpg";
+	MenuItemImages[ITM_SET_BELT_CELLS] = "images\\BELT.jpg";
+	MenuItemImages[ITM_SET_WATERPIT_CELL] = "images\\WATERPIT.jpg";
+	MenuItemImages[ITM_SET_WORKSHOP_CELL] = "images\\WORKSHOP.jpg";
+	MenuItemImages[ITM_SET_GEAR_CELL] = "images\\GEAR.jpg";
+	MenuItemImages[ITM_COPY_GAME_OBJECT] = "images\\COPY.jpg";
+	MenuItemImages[ITM_CUT_GAME_OBJECT] = "images\\CUT.jpg";
+	MenuItemImages[ITM_PASTE_GAME_OBJECT] = "images\\PASTE.jpg";
+	MenuItemImages[ITM_DELETE_GAME_OBJECT] = "images\\DELETE.jpg";
+	MenuItemImages[ITM_SAVE_GRID] = "images\\SAVE.jpg";
+	MenuItemImages[ITM_OPEN_GRID] = "images\\OPEN.jpg";
 	
 	///TODO: Change the path of the images as needed
-	MenuItemImages[ITM_SET_FLAG_CELL] = "images\\FLAG.jpg";
 	
 	
 	///TODO: Prepare images for each menu item and add it to the list
@@ -421,36 +432,35 @@ void Output::PrintMessage(string msg) const	//Prints a message on status bar
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
-//void Output::PrintPlayersInfo(string info)
-//{
-//	///TODO: Clear what was written on the toolbar
-//	CreatePlayModeToolBar();
-//
-//	// One of the correct ways to implement the above TODO is to call CreatePlayModeToolBar(); 
-//	// to clear what was written in the player info (there are other ways too � You are free to use any)
-//
-//	// Set the pen and font before drawing the string on the window
-//	pWind->SetPen(UI.PlayerInfoColor); 
-//	pWind->SetFont(20, BOLD , BY_NAME, "Verdana");   
-//
-//	int w=0, h=0;
-//
-//	///TODO: Calculate the Width and Height of the string if drawn using the current font 
-//	//       (Use GetStringSize() window function) and set the "w" and "h" variables with its width and height
-//	int w, h;
-//	pWind->GetStringSize(w, h, info);
-//
-//
-//	// Set the start X & Y coordinate of drawing the string
-//	int x = UI.width - w - 20; // space 20 before the right-side of the window
-//	                           // ( - w ) because x is the coordinate of the start point of the string (upper left)
-//	int y = (UI.ToolBarHeight - h) / 2; // in the Middle of the toolbar height
-//
-//	///TODO: Draw the string "info" in the specified location (x, y)
-//	pWind->DrawString(x, y, info);
-//
-//
-//}
+void Output::PrintPlayersInfo(string info)
+{
+	///TODO: Clear what was written on the toolbar
+	CreatePlayModeToolBar();
+
+	// One of the correct ways to implement the above TODO is to call CreatePlayModeToolBar(); 
+	// to clear what was written in the player info (there are other ways too � You are free to use any)
+
+	// Set the pen and font before drawing the string on the window
+	pWind->SetPen(UI.PlayerInfoColor); 
+	pWind->SetFont(20, BOLD , BY_NAME, "Verdana");   
+
+	int w=0, h=0;
+
+	///TODO: Calculate the Width and Height of the string if drawn using the current font 
+	//       (Use GetStringSize() window function) and set the "w" and "h" variables with its width and height
+	pWind->GetStringSize(w, h, info);
+
+
+	// Set the start X & Y coordinate of drawing the string
+	int x = UI.width - w - 20; // space 20 before the right-side of the window
+	                           // ( - w ) because x is the coordinate of the start point of the string (upper left)
+	int y = (UI.ToolBarHeight - h) / 2; // in the Middle of the toolbar height
+
+	///TODO: Draw the string "info" in the specified location (x, y)
+	pWind->DrawString(x, y, info);
+
+
+}
 
 //======================================================================================//
 //			         			Game Drawing Functions   								//
