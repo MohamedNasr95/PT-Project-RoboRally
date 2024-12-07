@@ -2,9 +2,13 @@
 
 #include "Input.h"
 
+#include "CellPosition.h"
+
 #include <iostream>
 
 #include <random>
+
+#include <cmath>
 ////////////////////////////////////////////////////////////////////////////////////////// 
 
 Output::Output()
@@ -462,7 +466,6 @@ void Output::PrintPlayersInfo(string info)
 	///TODO: Draw the string "info" in the specified location (x, y)
 	pWind->DrawString(x, y, info);
 
-
 }
 
 //======================================================================================//
@@ -507,9 +510,6 @@ void Output::DrawCell(const CellPosition & cellPos, color cellColor) const
 	///TODO: Draw the cell number in the x and y location
 
 	pWind->DrawInteger(x, y, cellNum);
-
-	
-
 	
 }
 
@@ -518,7 +518,11 @@ void Output::DrawCell(const CellPosition & cellPos, color cellColor) const
 void Output::DrawPlayer(const CellPosition & cellPos, int playerNum, color playerColor, Direction direction) const
 {
 	// TODO: Validate the cell position and the playerNum, if not valid return
-	
+	if (!(cellPos.IsValidCell()))
+		return;
+
+	if (playerNum < 0 || playerNum > 2)
+		return;
 
 	// Get the X & Y coordinates of the start point of the cell (its upper left corner)
 	int cellStartX = GetCellStartX(cellPos);
@@ -545,7 +549,7 @@ void Output::DrawPlayer(const CellPosition & cellPos, int playerNum, color playe
 														// for not overlapping with belts
 
 	// TODO: Draw the player triangle in center(x,y) and filled with the playerColor passed to the function
-	
+	DrawTriangle(x, y, radius * 1.5, radius * sqrt(3), direction, playerColor);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -553,6 +557,23 @@ void Output::DrawPlayer(const CellPosition & cellPos, int playerNum, color playe
 void Output::DrawBelt(const CellPosition& fromCellPos, const CellPosition& toCellPos) const
 {
 	// TODO: Validate the fromCell and toCell (Must be Horizontal or Vertical, and we can't have the first cell as a starting cell for a belt)
+	if (!(fromCellPos.IsValidCell()))
+		return;
+
+	if (!(toCellPos.IsValidCell()))
+		return;
+
+	// Case not vertical neither horizontal
+	if ((fromCellPos.VCell() != fromCellPos.VCell()) && (fromCellPos.HCell() != toCellPos.HCell()))
+		return;
+
+	// Case starting cell
+	if (fromCellPos.GetCellNum() == 1)
+		return;
+
+	// Case same cell
+	if (fromCellPos.GetCellNum() == toCellPos.GetCellNum())
+		return;
 
 	// Get the start X and Y coordinates of the upper left corner of the fromCell and toCell
 	int fromCellStartX = GetCellStartX(fromCellPos);
@@ -569,23 +590,42 @@ void Output::DrawBelt(const CellPosition& fromCellPos, const CellPosition& toCel
 
 	// TODO: Draw the belt line and the triangle at the center of the line pointing to the direction of the belt
 
+
+
 	// TODO: 1. Set pen color and width using the appropriate parameters of UI_Info object (UI)
 	//       2. Draw the line of the belt using the appropriate coordinates
-
-	
-	// TODO: Draw the triangle at the center of the belt line pointing to the direction of the belt
-	
-
-
-
-	
-	
+	pWind->SetPen(UI.BeltColor);
 	int triangleWidth = UI.CellWidth / 4;
 	int triangleHeight = UI.CellHeight / 4;
 
-
-
-
+	if (fromCellPos.VCell() == toCellPos.VCell()) {
+		pWind->DrawLine(beltFromCellX, beltFromCellY, beltFromCellX, beltToCellY);
+		if (fromCellPos.VCell() > toCellPos.VCell()) {
+			// down
+			int centerY = (beltToCellY - beltFromCellY) / 2;
+			DrawTriangle(beltFromCellX, centerY, triangleHeight, triangleWidth, DOWN,UI.BeltColor);
+		}
+		else {
+			// up
+			int centerY = (beltFromCellY - beltToCellY) / 2;
+			DrawTriangle(beltFromCellX, centerY, triangleHeight, triangleWidth, UP, UI.BeltColor);
+		}
+	}
+	else if (fromCellPos.HCell() == toCellPos.HCell()) {
+		pWind->DrawLine(beltFromCellX, beltFromCellY, beltToCellX, beltFromCellY);
+		if (fromCellPos.HCell() > toCellPos.HCell()) {
+			// left
+			int centerX = (beltFromCellX - beltToCellX) / 2;
+			DrawTriangle(centerX, beltFromCellY, triangleHeight, triangleWidth, LEFT, UI.BeltColor);
+		}
+		else {
+			// right
+			int centerX = (beltToCellX - beltFromCellX) / 2;
+			DrawTriangle(centerX, beltFromCellY, triangleHeight, triangleWidth, RIGHT, UI.BeltColor);
+		}
+	}
+	
+	// TODO: Draw the triangle at the center of the belt line pointing to the direction of the belt
 
 }
 
@@ -595,6 +635,8 @@ void Output::DrawBelt(const CellPosition& fromCellPos, const CellPosition& toCel
 void Output::DrawFlag(const CellPosition& cellPos) const
 {
 	// TODO: Validate the cell position
+	if (!(cellPos.IsValidCell()))
+		return;
 
 	// Get the X and Y coordinates of the start point of the cell (its upper left corner)
 	int cellStartX = GetCellStartX(cellPos);
@@ -605,29 +647,51 @@ void Output::DrawFlag(const CellPosition& cellPos) const
 	// TODO: 1. Draw the flag pole (the line)
 	int flagPoleStartX = cellStartX + UI.CellWidth / 2;
 	int flagPoleStartY = cellStartY + UI.CellHeight / 4;
+	int flagPoleEndY = cellStartY + ((UI.CellHeight * 3) / 4);
 
+	pWind->SetPen(RED);
+	pWind->DrawLine(flagPoleStartX, flagPoleStartY, flagPoleStartX, flagPoleEndY);
 	
 
 	// 		 2. Draw the flag (the triangle)
-	
+	int centerY = flagPoleStartY + UI.CellHeight / 8;
+	int centerX = flagPoleStartX + (UI.CellHeight / (8 * sqrt(3)));
+	int width = (UI.CellHeight / 8) * sqrt(3);
+	int height = UI.CellHeight / 4;
+	//pWind->DrawTriangle(x1, y1, x3, y2, x3, y3);
+	DrawTriangle(centerX, centerY, height, width, RIGHT, RED);
 	
 }
 
 void Output::DrawRotatingGear(const CellPosition& cellPos, bool clockwise) const
 {
 	// TODO: Validate the cell position
+	if (!(cellPos.IsValidCell()))
+		return;
 
 	// TODO: Draw the rotating gear image in the cell based on the passed direction (clockwise or counter clockwise)
-
+	string rotatingGear;
+	if (clockwise)
+	{
+		rotatingGear = "images\\RotateClockGear.jpg";
+	}
+	else
+	{
+		rotatingGear = "images\\RotateCounterClockGear.jpg";
+	}
+	DrawImageInCell(cellPos, rotatingGear, UI.CellWidth, UI.CellHeight);
 
 }
 
 void Output::DrawAntenna(const CellPosition& cellPos) const
 {
 	// TODO: Validate the cell position
+	if (!(cellPos.IsValidCell()))
+		return;
 
 	// TODO: Draw the antenna image in the cell
-
+	string antenna = "images\\antennaOnCell.jpg";
+	DrawImageInCell(cellPos, antenna, UI.CellWidth, UI.CellHeight);
 	
 	
 }
@@ -635,9 +699,12 @@ void Output::DrawAntenna(const CellPosition& cellPos) const
 void Output::DrawWorkshop(const CellPosition& cellPos) const
 {
 	// TODO: Validate the cell position
+	if (!(cellPos.IsValidCell()))
+		return;
 
 	// TODO: Draw the workshop image in the cell
-	
+	string workshop = "images\\workshopOnCell.jpg";
+	DrawImageInCell(cellPos, workshop, UI.CellWidth, UI.CellHeight);
 
 
 }
@@ -645,15 +712,21 @@ void Output::DrawWorkshop(const CellPosition& cellPos) const
 void Output::DrawDangerZone(const CellPosition& cellPos) const
 {
     ///TODO: Complete the implementation of the following function
+	if (!(cellPos.IsValidCell()))
+		return;
 
+	DrawCell(cellPos, RED);
 
 }
 
 void Output::DrawWaterPit(const CellPosition& cellPos) const
 {
 	///TODO: Complete the implementation of the following function
+	if (!(cellPos.IsValidCell()))
+		return;
 
-
+	string waterpit = "images\\waterPitOnCell.jpg";
+	DrawImageInCell(cellPos, waterpit, UI.CellWidth, UI.CellHeight);
 }
 
 Command Output::getRandomCommand() const {
