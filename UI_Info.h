@@ -24,8 +24,19 @@ enum DESIGN_MODE_ITEMS // The items of the Design Mode (you should add more item
 	// If you want to change the menu items order, change the order here
 
 	ITM_SET_FLAG_CELL,
-	ITM_EXIT,
+	ITM_EXIT_DM,
 	ITM_SWITCH_TO_PLAY_MODE,
+	ITM_SET_ANTENNA_CELL,
+	ITM_SET_BELT_CELLS,
+	ITM_SET_WATERPIT_CELL,
+	ITM_SET_WORKSHOP_CELL,
+	ITM_SET_GEAR_CELL,
+	ITM_COPY_GAME_OBJECT,
+	ITM_CUT_GAME_OBJECT,
+	ITM_PASTE_GAME_OBJECT,
+	ITM_DELETE_GAME_OBJECT,
+	ITM_SAVE_GRID,
+	ITM_OPEN_GRID,
 	
 	///TODO: Add more items names here
 
@@ -38,8 +49,12 @@ enum PLAY_MODE_ITEMS // The items of the Play Mode (you should add more items)
 	// If you want to change the menu items order, change the order here
 
 	ITM_EXECUTE_COMMANDS,
+	ITM_EXIT_GM,
 	ITM_SELECT_COMMAND,
 	ITM_SWITCH_TO_DESIGN_MODE,
+	ITM_REBOOT_REPAIR,
+	ITM_CONSUMABLE,
+	ITM_NEW_GAME,
 
 	///TODO: Add more items names here
 
