@@ -315,12 +315,15 @@ void Output::CreatePlayModeToolBar() const
 	// reoder them in UI_Info.h ==> enum DESIGN_MODE_ITEMS
 	// ** MAKE SURE THAT THE IMAGES ARE .JPG FILES **
 	string MenuItemImages[PLAY_ITM_COUNT];
+	MenuItemImages[ITM_EXECUTE_COMMANDS] = "images\\EXECUTE.jpg";
+	MenuItemImages[ITM_EXIT_GM] = "images\\Menu_exit.jpg";
+	MenuItemImages[ITM_SELECT_COMMAND] = "images\\SELECT.jpg";
 	MenuItemImages[ITM_SWITCH_TO_DESIGN_MODE] = "images\\DESIGN.jpg";
+	MenuItemImages[ITM_REBOOT_REPAIR] = "images\\REPAIR.jpg";
+	MenuItemImages[ITM_CONSUMABLE] = "images\\CONSUME.jpg";\
+	MenuItemImages[ITM_NEW_GAME] = "images\\NEW GAME.jpg";
 
 	///TODO: Change the path of the images as needed
-	MenuItemImages[ITM_EXECUTE_COMMANDS] = "images\\Menu_Dice.jpg";
-	MenuItemImages[ITM_SELECT_COMMAND] = "images\\Menu_Dice.jpg";
-
 	///TODO: Prepare images for each menu item and add it to the list
 
 
